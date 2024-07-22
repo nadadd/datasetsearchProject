@@ -5,6 +5,7 @@ import math
 import json
 import logging
 from criteria.management.commands.import_datasets import Command
+
 # Configurer le logger
 logger = logging.getLogger(__name__)
 
@@ -40,8 +41,8 @@ class DatasetViewSet(viewsets.ModelViewSet):
             logger.info(f"Dataset ID {dataset.id}: Distance {distance}")
             datasets_with_distance.append((dataset, distance))
         
-        # Tri des datasets par distance croissante
-        datasets_with_distance.sort(key=lambda x: x[1])
+        # Tri des datasets par distance décroissante
+        datasets_with_distance.sort(key=lambda x: x[1], reverse=True)
         
         # Retourner les datasets triés par distance
         sorted_datasets = [dataset for dataset, _ in datasets_with_distance]
@@ -51,16 +52,6 @@ class DatasetViewSet(viewsets.ModelViewSet):
     def calculate_euclidean_distance(self, dataset, technical_criteria, ethical_criteria):
         distance = 0
         
-        # def parse_value(value):
-        #     if isinstance(value, bool):
-        #         return 0.9 if value else 0.5
-        #     elif value in ["nan", None, '']:
-        #         return 0.7
-        #     try:
-        #         return float(value)
-        #     except ValueError:
-        #         return 0.7
-
         def get_criterion_value(criterion):
             value = getattr(dataset, criterion, None)
             logger.info(f"Criterion {criterion}: Value {value}")
@@ -85,5 +76,4 @@ class DatasetViewSet(viewsets.ModelViewSet):
                 logger.warning(f"Ethical Criterion {criterion} not found in dataset model.")
 
         return math.sqrt(distance)
-
-
+    

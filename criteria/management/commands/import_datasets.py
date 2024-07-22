@@ -25,7 +25,6 @@ class Command(BaseCommand):
                 return 0.9
             if value == 'False':
                 return 0.5
-            arse
 
         for csv_file in csv_files:
             reader = pd.read_csv(csv_file, encoding='ISO-8859-1')
